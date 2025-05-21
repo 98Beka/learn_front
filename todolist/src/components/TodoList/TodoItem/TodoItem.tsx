@@ -1,15 +1,19 @@
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
 import type { Todo } from "../../../App";
+import { useContext } from "react";
+import { TodoContext } from "../../../TodoContext";
 
 interface TodoItemProps {
     todo: Todo;
-    onDeleteTodo: (id: Todo['id']) => void;
-    onEditTodo: (id: Todo['id']) => void;
-    onChecked: (id: Todo['id']) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onChecked, onEditTodo}) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todo}) => {
+    const context = useContext(TodoContext)
+    if (!context)
+        throw new Error('Todolist must be used within a TodoContext.Provider')
+    const { onChecked, onEditTodo, onDeleteTodo } = context
+
     return (
         <Paper
             elevation={2}

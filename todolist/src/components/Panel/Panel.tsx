@@ -1,7 +1,8 @@
 import { Add } from "@mui/icons-material";
 import { Button, Paper, TextField } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import type { Todo } from "../../App";
+import { TodoContext } from "../../TodoContext";
 
 const DEFAULT_TODO:Todo = {
   id: 0,
@@ -10,13 +11,13 @@ const DEFAULT_TODO:Todo = {
   checked: false,
 };
 
-interface PanelProps {
-    onAddTodo:(todo:Todo) => void
-}
-
-export const Panel:React.FC<PanelProps> = ({onAddTodo}) => {
+export const Panel = () => {
     const [todo, setTodo] = useState(DEFAULT_TODO);
-
+    const context = useContext(TodoContext)
+    if(!context)
+        throw new Error('Todolist must be used within a TodoContext.Provider')
+    const {onAddTodo} = context
+    
     const onClick = () => {
         setTodo(DEFAULT_TODO)
         onAddTodo(todo)

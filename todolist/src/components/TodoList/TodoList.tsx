@@ -1,38 +1,28 @@
 import { Box } from "@mui/material"
 import { TodoItem } from "./TodoItem/TodoItem"
-import type { Todo } from "../../App";
 import { EditTodoItem } from "./EditTodoItem/EditTodoItem";
+import { useContext } from "react";
+import { TodoContext } from "../../TodoContext";
 
-interface TodoListProps {
-    editTodoId: Todo['id'] | null
-    todoList: Todo[]
-    onDeleteTodo: (id: Todo['id']) => void
-    onEditTodo: (id: Todo['id']) => void
-    onChangeTodo: ({ name, description }: Omit<Todo, 'id' | 'checked'>) => void;
-    onChecked: (id: Todo['id']) => void
-}
 
-export const TodoList: React.FC<TodoListProps> = ({
-    todoList,
-    onDeleteTodo,
-    onChecked,
-    onEditTodo,
-    editTodoId,
-    onChangeTodo
-}) => <Box>
+
+export const TodoList = () => {
+    const context = useContext(TodoContext)
+    if(!context)
+        throw new Error('Todolist must be used within a TodoContext.Provider')
+    const {todoList, editTodoId} = context
+    return <Box>
         {
             todoList.map(todo => {
                 if (todo.id === editTodoId){
-                    return <EditTodoItem key={todo.id} onChangeTodo={(todo) => onChangeTodo(todo)} todo={todo}/>
+                    return <EditTodoItem key={todo.id} todo={todo}/>
                 }
                 else {
                     return <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                        onDeleteTodo={onDeleteTodo}
-                        onChecked={onChecked}
-                        onEditTodo={onEditTodo} />
+                    key={todo.id}
+                    todo={todo} />
                 }
             })
         }
     </Box>
+}

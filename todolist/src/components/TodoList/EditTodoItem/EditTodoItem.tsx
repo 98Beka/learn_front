@@ -1,17 +1,19 @@
 import { Button, Paper, TextField } from "@mui/material";
 import type { Todo } from "../../../App";
-import { useState, type ChangeEvent } from "react";
+import { useContext, useState, type ChangeEvent } from "react";
 import Save from "@mui/icons-material/Save";
+import { TodoContext } from "../../../TodoContext";
 
 interface EditTodoItemProps {
     todo: Todo;
-    onChangeTodo: ({ name, description }: Omit<Todo, 'id' | 'checked'>) => void;
 }
 
-export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo, onChangeTodo }) => {
-
+export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo}) => {
     const [todoEdit, setTodo] = useState({ name: todo.name, description: todo.description })
-
+    const context = useContext(TodoContext)
+    if(!context)
+        throw new Error('Todolist must be used within a TodoContext.Provider')
+    const {onChangeTodo} = context
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
         setTodo({ ...todo, [name]: value })

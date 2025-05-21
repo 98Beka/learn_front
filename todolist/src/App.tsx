@@ -2,6 +2,7 @@ import { Header, Panel, TodoList } from './components'
 import './App.css'
 import Box from '@mui/material/Box'
 import { useState } from 'react'
+import { TodoContext } from './TodoContext';
 
 export type Todo = {
   id: number;
@@ -56,19 +57,21 @@ function App() {
   }
 
   return (
-    <div>
+    <TodoContext.Provider value={{
+      todoList,
+      editTodoId,
+      onAddTodo,
+      onDeleteTodo,
+      onChangeTodo,
+      onEditTodo,
+      onChecked
+    }}>
       <Box display='flex' flexDirection='column' width={'500px'} >
         <Header />
-        <Panel onAddTodo={onAddTodo} />
-        <TodoList
-          todoList={todoList}
-          onChecked={onChecked}
-          onDeleteTodo={onDeleteTodo}
-          editTodoId={editTodoId}
-          onEditTodo={onEditTodo}
-          onChangeTodo={onChangeTodo} />
+        <Panel />
+        <TodoList />
       </Box>
-    </div>
+    </TodoContext.Provider>
   )
 }
 
