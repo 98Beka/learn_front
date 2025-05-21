@@ -16,7 +16,7 @@ export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo}) => {
     const {onChangeTodo} = context
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
-        setTodo({ ...todo, [name]: value })
+        setTodo({ ...todoEdit, [name]: value })
     }
 
     return (

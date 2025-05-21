@@ -4,8 +4,6 @@ import { EditTodoItem } from "./EditTodoItem/EditTodoItem";
 import { useContext } from "react";
 import { TodoContext } from "../../TodoContext";
 
-
-
 export const TodoList = () => {
     const context = useContext(TodoContext)
     if(!context)
