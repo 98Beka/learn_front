@@ -1,18 +1,26 @@
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
 import type { Todo } from "../../../App";
-import { useContext } from "react";
-import { TodoContext } from "../../../TodoContext";
+import { useDispatch } from "react-redux";
 
 interface TodoItemProps {
     todo: Todo;
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo}) => {
-    const context = useContext(TodoContext)
-    if (!context)
-        throw new Error('Todolist must be used within a TodoContext.Provider')
-    const { onChecked, onEditTodo, onDeleteTodo } = context
+    const dispatch = useDispatch();
+
+    const onChecked = () =>{
+        dispatch({type: 'EDIT_TODO', payload: {...todo, checked: false}})
+    }
+
+    const onEditTodo = () => {
+        dispatch({type: 'SET_EDIT_TODO', payload: todo.id})
+    }
+
+    const onDeleteTodo = () => {
+        dispatch({type: 'REMOVE_TODO', payload: todo.id})
+    }
 
     return (
         <Paper
@@ -33,7 +41,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo}) => {
             <Box textAlign='left'>
                 <Typography
                     sx={{ cursor: 'pointer', textDecorationLine: todo.checked ? 'line-through' : 'none' }}
-                    onClick={() => onChecked(todo.id)}
+                    onClick={() => onChecked()}
                     variant="h5"
                     component="h5"
                     gutterBottom>
@@ -44,10 +52,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo}) => {
                 </Typography>
             </Box>
             <Box>
-                <IconButton onClick={() => onEditTodo(todo.id)} color="warning" aria-label='edit'>
+                <IconButton onClick={() => onEditTodo()} color="warning" aria-label='edit'>
                     <EditOutlined />
                 </IconButton>
-                <IconButton onClick={() => onDeleteTodo(todo.id)} color="error" aria-label='delete'>
+                <IconButton onClick={() => onDeleteTodo()} color="error" aria-label='delete'>
                     <DeleteOutline />
                 </IconButton>
             </Box>

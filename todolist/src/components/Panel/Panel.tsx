@@ -1,8 +1,8 @@
 import { Add } from "@mui/icons-material";
 import { Button, Paper, TextField } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import type { Todo } from "../../App";
-import { TodoContext } from "../../TodoContext";
+import { useDispatch } from "react-redux";
 
 const DEFAULT_TODO:Todo = {
   id: 0,
@@ -13,19 +13,24 @@ const DEFAULT_TODO:Todo = {
 
 export const Panel = () => {
     const [todo, setTodo] = useState(DEFAULT_TODO);
-    const context = useContext(TodoContext)
-    if(!context)
-        throw new Error('Todolist must be used within a TodoContext.Provider')
-    const {onAddTodo} = context
+    const dispatch = useDispatch();
     
     const onClick = () => {
+        if (!todo.name.trim()) return;
+
+        const newTodo = {
+            ...todo,
+            id: Date.now(),
+        };
+
+        dispatch({ type: "ADD_TODO", payload: newTodo });
         setTodo(DEFAULT_TODO)
-        onAddTodo(todo)
     }
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name} = event.target
         setTodo({...todo, [name]: value})
+        dispatch({ type: "EDIT_TODO", payload: todo });
     }
 
     return <Paper

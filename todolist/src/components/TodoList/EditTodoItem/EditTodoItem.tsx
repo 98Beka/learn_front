@@ -1,22 +1,23 @@
 import { Button, Paper, TextField } from "@mui/material";
 import type { Todo } from "../../../App";
-import { useContext, useState, type ChangeEvent } from "react";
+import {useState, type ChangeEvent } from "react";
 import Save from "@mui/icons-material/Save";
-import { TodoContext } from "../../../TodoContext";
+import { useDispatch } from "react-redux";
 
 interface EditTodoItemProps {
     todo: Todo;
 }
 
 export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo}) => {
-    const [todoEdit, setTodo] = useState({ name: todo.name, description: todo.description })
-    const context = useContext(TodoContext)
-    if(!context)
-        throw new Error('Todolist must be used within a TodoContext.Provider')
-    const {onChangeTodo} = context
+    const [todoEdit, setTodo] = useState({id:todo.id, name: todo.name, description: todo.description })
+    const dispatch = useDispatch();
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
         setTodo({ ...todoEdit, [name]: value })
+    }
+    const onChangeTodo =() => {
+        dispatch({type:'EDIT_TODO', payload: todoEdit})
+        dispatch({type:'SET_EDIT_TODO', payload: 0})
     }
 
     return (
@@ -36,7 +37,7 @@ export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo}) => {
         >
             <TextField label="name" name="name" variant="outlined" value={todoEdit.name} onChange={onEdit} fullWidth />
             <TextField label="description" name="description" variant="outlined" value={todoEdit.description} onChange={onEdit} fullWidth />
-            <Button startIcon={<Save />} onClick={() => onChangeTodo(todoEdit)} variant="outlined">Save</Button>
+            <Button startIcon={<Save />} onClick={() => onChangeTodo()} variant="outlined">Save</Button>
         </Paper>
     )
 }

@@ -1,17 +1,16 @@
 import { Box } from "@mui/material"
 import { TodoItem } from "./TodoItem/TodoItem"
 import { EditTodoItem } from "./EditTodoItem/EditTodoItem";
-import { useContext } from "react";
-import { TodoContext } from "../../TodoContext";
+import { useSelector } from "react-redux";
+import type { Todo } from "../../App"
+import type { RootState } from "../../store";
 
 export const TodoList = () => {
-    const context = useContext(TodoContext)
-    if(!context)
-        throw new Error('Todolist must be used within a TodoContext.Provider')
-    const {todoList, editTodoId} = context
+    const todoList = useSelector((state: RootState) => state.todos)
+    const editTodoId = useSelector((state: RootState) => state.editTodoId);
     return <Box>
         {
-            todoList.map(todo => {
+            todoList.map((todo:Todo) => {
                 if (todo.id === editTodoId){
                     return <EditTodoItem key={todo.id} todo={todo}/>
                 }
