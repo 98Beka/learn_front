@@ -1,7 +1,8 @@
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
-import type { Todo } from "../../../App";
 import { useDispatch } from "react-redux";
+import { checkToDo, removeToDo, setEditTodo } from "../../../todoSlice";
+import type { Todo } from "../../../types";
 
 interface TodoItemProps {
     todo: Todo;
@@ -11,15 +12,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo}) => {
     const dispatch = useDispatch();
 
     const onChecked = () =>{
-        dispatch({type: 'EDIT_TODO', payload: {...todo, checked: false}})
+        dispatch(checkToDo(todo.id))
     }
 
     const onEditTodo = () => {
-        dispatch({type: 'SET_EDIT_TODO', payload: todo.id})
+        dispatch(setEditTodo(todo.id))
     }
 
     const onDeleteTodo = () => {
-        dispatch({type: 'REMOVE_TODO', payload: todo.id})
+        dispatch(removeToDo(todo.id))
     }
 
     return (

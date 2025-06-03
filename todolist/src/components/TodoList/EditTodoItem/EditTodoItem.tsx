@@ -1,23 +1,23 @@
 import { Button, Paper, TextField } from "@mui/material";
-import type { Todo } from "../../../App";
 import {useState, type ChangeEvent } from "react";
 import Save from "@mui/icons-material/Save";
 import { useDispatch } from "react-redux";
+import { editTodo } from "../../../todoSlice";
+import type { EditTodo, Todo } from "../../../types";
 
 interface EditTodoItemProps {
     todo: Todo;
 }
 
 export const EditTodoItem: React.FC<EditTodoItemProps> = ({ todo}) => {
-    const [todoEdit, setTodo] = useState({id:todo.id, name: todo.name, description: todo.description })
+    const [todoEdit, setTodo] = useState<EditTodo>({id:todo.id, name: todo.name, description: todo.description })
     const dispatch = useDispatch();
     const onEdit = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
         setTodo({ ...todoEdit, [name]: value })
     }
     const onChangeTodo =() => {
-        dispatch({type:'EDIT_TODO', payload: todoEdit})
-        dispatch({type:'SET_EDIT_TODO', payload: 0})
+        dispatch(editTodo(todoEdit))
     }
 
     return (

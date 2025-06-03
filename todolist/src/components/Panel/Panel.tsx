@@ -1,8 +1,9 @@
 import { Add } from "@mui/icons-material";
 import { Button, Paper, TextField } from "@mui/material";
 import { useState } from "react";
-import type { Todo } from "../../App";
 import { useDispatch } from "react-redux";
+import type { Todo } from "../../types";
+import { addTodo } from "../../todoSlice";
 
 const DEFAULT_TODO:Todo = {
   id: 0,
@@ -23,14 +24,13 @@ export const Panel = () => {
             id: Date.now(),
         };
 
-        dispatch({ type: "ADD_TODO", payload: newTodo });
+        dispatch(addTodo(newTodo));
         setTodo(DEFAULT_TODO)
     }
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name} = event.target
         setTodo({...todo, [name]: value})
-        dispatch({ type: "EDIT_TODO", payload: todo });
     }
 
     return <Paper
